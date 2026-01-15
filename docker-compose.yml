@@ -1,0 +1,341 @@
+---
+services:
+  mariadb:
+    build:
+      context: .
+    restart: always
+    environment:
+      # ==============================================
+      # Core MariaDB Configuration
+      # ==============================================
+      STACK_VERSION: ${STACK_VERSION:-11.4}
+      MARIADB_PORT: ${MARIADB_PORT:-3306}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-appdb}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER:-appuser}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+
+      # Network Configuration
+      MARIADB_BIND_ADDRESS: ${MARIADB_BIND_ADDRESS:-0.0.0.0}
+      MARIADB_MAX_CONNECTIONS: ${MARIADB_MAX_CONNECTIONS:-500}
+      MARIADB_CONNECT_TIMEOUT: ${MARIADB_CONNECT_TIMEOUT:-10}
+      MARIADB_WAIT_TIMEOUT: ${MARIADB_WAIT_TIMEOUT:-28800}
+      MARIADB_INTERACTIVE_TIMEOUT: ${MARIADB_INTERACTIVE_TIMEOUT:-28800}
+
+      # InnoDB Storage Engine Configuration
+      MARIADB_INNODB_BUFFER_POOL_SIZE: ${MARIADB_INNODB_BUFFER_POOL_SIZE:-1G}
+      MARIADB_INNODB_LOG_FILE_SIZE: ${MARIADB_INNODB_LOG_FILE_SIZE:-256M}
+      MARIADB_INNODB_LOG_BUFFER_SIZE: ${MARIADB_INNODB_LOG_BUFFER_SIZE:-64M}
+      MARIADB_INNODB_FLUSH_LOG_AT_TRX_COMMIT: ${MARIADB_INNODB_FLUSH_LOG_AT_TRX_COMMIT:-1}
+      MARIADB_INNODB_FLUSH_METHOD: ${MARIADB_INNODB_FLUSH_METHOD:-O_DIRECT}
+      MARIADB_INNODB_FILE_PER_TABLE: ${MARIADB_INNODB_FILE_PER_TABLE:-ON}
+      MARIADB_INNODB_OPEN_FILES: ${MARIADB_INNODB_OPEN_FILES:-4000}
+      MARIADB_INNODB_IO_CAPACITY: ${MARIADB_INNODB_IO_CAPACITY:-2000}
+      MARIADB_INNODB_IO_CAPACITY_MAX: ${MARIADB_INNODB_IO_CAPACITY_MAX:-4000}
+
+      # Thread Configuration
+      MARIADB_THREAD_CACHE_SIZE: ${MARIADB_THREAD_CACHE_SIZE:-128}
+      MARIADB_THREAD_STACK: ${MARIADB_THREAD_STACK:-256K}
+
+      # Table Configuration
+      MARIADB_TABLE_OPEN_CACHE: ${MARIADB_TABLE_OPEN_CACHE:-4000}
+      MARIADB_TABLE_DEFINITION_CACHE: ${MARIADB_TABLE_DEFINITION_CACHE:-2000}
+      MARIADB_OPEN_FILES_LIMIT: ${MARIADB_OPEN_FILES_LIMIT:-65535}
+
+      # Binary Logging (Replication)
+      MARIADB_LOG_BIN: ${MARIADB_LOG_BIN:-mysql-bin}
+      MARIADB_BINLOG_FORMAT: ${MARIADB_BINLOG_FORMAT:-ROW}
+      MARIADB_EXPIRE_LOGS_DAYS: ${MARIADB_EXPIRE_LOGS_DAYS:-7}
+      MARIADB_MAX_BINLOG_SIZE: ${MARIADB_MAX_BINLOG_SIZE:-512M}
+      MARIADB_SYNC_BINLOG: ${MARIADB_SYNC_BINLOG:-1}
+      MARIADB_SERVER_ID: ${MARIADB_SERVER_ID:-1}
+
+      # Slow Query Log
+      MARIADB_SLOW_QUERY_LOG: ${MARIADB_SLOW_QUERY_LOG:-ON}
+      MARIADB_SLOW_QUERY_LOG_FILE: ${MARIADB_SLOW_QUERY_LOG_FILE:-/var/log/mysql/slow.log}
+      MARIADB_LONG_QUERY_TIME: ${MARIADB_LONG_QUERY_TIME:-2}
+      MARIADB_LOG_QUERIES_NOT_USING_INDEXES: ${MARIADB_LOG_QUERIES_NOT_USING_INDEXES:-OFF}
+
+      # General Log
+      MARIADB_GENERAL_LOG: ${MARIADB_GENERAL_LOG:-OFF}
+      MARIADB_GENERAL_LOG_FILE: ${MARIADB_GENERAL_LOG_FILE:-/var/log/mysql/general.log}
+
+      # Error Log
+      MARIADB_LOG_ERROR: ${MARIADB_LOG_ERROR:-/var/log/mysql/error.log}
+      MARIADB_LOG_WARNINGS: ${MARIADB_LOG_WARNINGS:-2}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+      # Security Configuration
+      MARIADB_SECURE_AUTH: ${MARIADB_SECURE_AUTH:-ON}
+      MARIADB_LOCAL_INFILE: ${MARIADB_LOCAL_INFILE:-OFF}
+      MARIADB_SKIP_NAME_RESOLVE: ${MARIADB_SKIP_NAME_RESOLVE:-ON}
+      MARIADB_SYMBOLIC_LINKS: ${MARIADB_SYMBOLIC_LINKS:-OFF}
+
+      # SSL Configuration
+      MARIADB_SSL: ${MARIADB_SSL:-false}
+      MARIADB_SSL_CA: ${MARIADB_SSL_CA:-/etc/mysql/ssl/ca.pem}
+      MARIADB_SSL_CERT: ${MARIADB_SSL_CERT:-/etc/mysql/ssl/server-cert.pem}
+      MARIADB_SSL_KEY: ${MARIADB_SSL_KEY:-/etc/mysql/ssl/server-key.pem}
+
+      # Character Set Configuration
+      MARIADB_CHARACTER_SET_SERVER: ${MARIADB_CHARACTER_SET_SERVER:-utf8mb4}
+      MARIADB_COLLATION_SERVER: ${MARIADB_COLLATION_SERVER:-utf8mb4_unicode_ci}
+
+      # Memory Configuration
+      MARIADB_KEY_BUFFER_SIZE: ${MARIADB_KEY_BUFFER_SIZE:-256M}
+      MARIADB_SORT_BUFFER_SIZE: ${MARIADB_SORT_BUFFER_SIZE:-4M}
+      MARIADB_READ_BUFFER_SIZE: ${MARIADB_READ_BUFFER_SIZE:-2M}
+      MARIADB_READ_RND_BUFFER_SIZE: ${MARIADB_READ_RND_BUFFER_SIZE:-8M}
+      MARIADB_JOIN_BUFFER_SIZE: ${MARIADB_JOIN_BUFFER_SIZE:-4M}
+      MARIADB_TMP_TABLE_SIZE: ${MARIADB_TMP_TABLE_SIZE:-64M}
+      MARIADB_MAX_HEAP_TABLE_SIZE: ${MARIADB_MAX_HEAP_TABLE_SIZE:-64M}
+
+      # Packet Configuration
+      MARIADB_MAX_ALLOWED_PACKET: ${MARIADB_MAX_ALLOWED_PACKET:-256M}
+
+      # Container Resource Configuration
+      CONTAINER_CPU_LIMIT: ${CONTAINER_CPU_LIMIT:-2}
+      CONTAINER_MEMORY_LIMIT: ${CONTAINER_MEMORY_LIMIT:-4G}
+      CONTAINER_SWAP_LIMIT: ${CONTAINER_SWAP_LIMIT:-1G}
+      CONTAINER_PIDS_LIMIT: ${CONTAINER_PIDS_LIMIT:-4096}
+
+      # Volume Paths
+      MARIADB_DATA_PATH: ${MARIADB_DATA_PATH:-/var/lib/mysql}
+      MARIADB_LOGS_PATH: ${MARIADB_LOGS_PATH:-/var/log/mysql}
+      MARIADB_CONFIG_PATH: ${MARIADB_CONFIG_PATH:-/etc/mysql}
+      MARIADB_BACKUP_PATH: ${MARIADB_BACKUP_PATH:-/backup}
+
+      # Resource Limits
+      MARIADB_ULIMIT_NOFILE: ${MARIADB_ULIMIT_NOFILE:-65535}
+      MARIADB_ULIMIT_NPROC: ${MARIADB_ULIMIT_NPROC:-65535}
+
+      # Locale Configuration
+      LANG: ${LANG:-es_CO.UTF-8}
+      LC_ALL: ${LC_ALL:-es_CO.UTF-8}
+
+      # Initialization
+      MARIADB_INIT_TIMEOUT: ${MARIADB_INIT_TIMEOUT:-60}
+      MARIADB_BOOTSTRAP_TIMEOUT: ${MARIADB_BOOTSTRAP_TIMEOUT:-300}
+
+      # ==============================================
+      # MariaDB 11+ Specific Configurations
+      # ==============================================
+      MARIADB_PERFORMANCE_SCHEMA: ${MARIADB_PERFORMANCE_SCHEMA:-ON}
+
+      # InnoDB Advanced
+      MARIADB_INNODB_BUFFER_POOL_INSTANCES: ${MARIADB_INNODB_BUFFER_POOL_INSTANCES:-8}
+      MARIADB_INNODB_READ_IO_THREADS: ${MARIADB_INNODB_READ_IO_THREADS:-8}
+      MARIADB_INNODB_WRITE_IO_THREADS: ${MARIADB_INNODB_WRITE_IO_THREADS:-8}
+      MARIADB_INNODB_PURGE_THREADS: ${MARIADB_INNODB_PURGE_THREADS:-4}
+      MARIADB_INNODB_ADAPTIVE_HASH_INDEX: ${MARIADB_INNODB_ADAPTIVE_HASH_INDEX:-ON}
+      MARIADB_INNODB_CHANGE_BUFFERING: ${MARIADB_INNODB_CHANGE_BUFFERING:-all}
+      MARIADB_INNODB_DOUBLEWRITE: ${MARIADB_INNODB_DOUBLEWRITE:-ON}
+      MARIADB_INNODB_STATS_ON_METADATA: ${MARIADB_INNODB_STATS_ON_METADATA:-OFF}
+
+      # Galera Cluster Configuration (Optional)
+      MARIADB_GALERA_CLUSTER: ${MARIADB_GALERA_CLUSTER:-false}
+      MARIADB_WSREP_CLUSTER_NAME: ${MARIADB_WSREP_CLUSTER_NAME:-galera_cluster}
+      MARIADB_WSREP_CLUSTER_ADDRESS: ${MARIADB_WSREP_CLUSTER_ADDRESS:-gcomm://}
+      MARIADB_WSREP_NODE_NAME: ${MARIADB_WSREP_NODE_NAME:-node1}
+      MARIADB_WSREP_NODE_ADDRESS: ${MARIADB_WSREP_NODE_ADDRESS:-}
+      MARIADB_WSREP_SST_METHOD: ${MARIADB_WSREP_SST_METHOD:-mariabackup}
+      MARIADB_WSREP_SST_AUTH: ${MARIADB_WSREP_SST_AUTH:-}
+
+      # Health Check Configuration
+      MARIADB_HEALTH_CHECK_INTERVAL: ${MARIADB_HEALTH_CHECK_INTERVAL:-30s}
+      MARIADB_HEALTH_CHECK_TIMEOUT: ${MARIADB_HEALTH_CHECK_TIMEOUT:-10s}
+      MARIADB_HEALTH_CHECK_RETRIES: ${MARIADB_HEALTH_CHECK_RETRIES:-3}
+      MARIADB_HEALTH_CHECK_START_PERIOD: ${MARIADB_HEALTH_CHECK_START_PERIOD:-60s}
+
+      # Process Management
+      MARIADB_PID_FILE: ${MARIADB_PID_FILE:-/var/run/mysqld/mysqld.pid}
+      MARIADB_SOCKET: ${MARIADB_SOCKET:-/var/run/mysqld/mysqld.sock}
+
+      # AWS Config
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      ENVIRONMENT_TYPE: ${ENVIRONMENT_TYPE:-dev}
+
+      # AWS Secrets Manager (Optional - for production)
+      USE_SECRETS_MANAGER: ${USE_SECRETS_MANAGER:-false}
+      SECRET_NAME: ${SECRET_NAME}
+      MARIADB_PASSWORD_LENGTH: ${MARIADB_PASSWORD_LENGTH:-24}
+      MARIADB_PASSWORD_ROTATION_DAYS: ${MARIADB_PASSWORD_ROTATION_DAYS:-90}
+
+      # ==============================================
+      # BACKUP CONFIGURATION
+      # ==============================================
+
+      # Basic Backup Settings
+      BACKUP_ENABLED: ${BACKUP_ENABLED:-true}
+      BACKUP_DIRECTORY: ${BACKUP_DIRECTORY:-/backup}
+      BACKUP_SCHEDULE: ${BACKUP_SCHEDULE:-0 2 * * *}
+      BACKUP_COMPRESSION: ${BACKUP_COMPRESSION:-true}
+      BACKUP_COMPRESSION_ALGORITHM: ${BACKUP_COMPRESSION_ALGORITHM:-zstd}
+      BACKUP_PARALLEL_THREADS: ${BACKUP_PARALLEL_THREADS:-4}
+
+      # Point-in-Time Recovery Configuration
+      PITR_ENABLED: ${PITR_ENABLED:-false}
+      PITR_BINLOG_RETENTION_HOURS: ${PITR_BINLOG_RETENTION_HOURS:-72}
+
+      # Storage Configuration
+      BACKUP_STORAGE_TYPE: ${BACKUP_STORAGE_TYPE:-local}
+      BACKUP_MAX_SIZE_GB: ${BACKUP_MAX_SIZE_GB:-100}
+      BACKUP_ARCHIVE_ENABLED: ${BACKUP_ARCHIVE_ENABLED:-true}
+      BACKUP_ARCHIVE_AFTER_DAYS: ${BACKUP_ARCHIVE_AFTER_DAYS:-30}
+
+      # AWS S3 Configuration (for backup storage)
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME:-}
+      S3_PREFIX: ${S3_PREFIX:-mariadb-backups/}
+
+      # Database Configuration
+      DATABASE_NAME: ${DATABASE_NAME:-appdb}
+
+      # Security Configuration (backup-specific)
+      BACKUP_ENCRYPTION_ENABLED: ${BACKUP_ENCRYPTION_ENABLED:-false}
+      BACKUP_ENCRYPTION_KEY: ${BACKUP_ENCRYPTION_KEY:-}
+      ENABLE_AUDIT_LOGGING: ${ENABLE_AUDIT_LOGGING:-true}
+
+      # Performance Configuration (backup-specific)
+      BACKUP_CHECKPOINT_INTERVAL: ${BACKUP_CHECKPOINT_INTERVAL:-1000}
+      BACKUP_MEMORY_LIMIT_MB: ${BACKUP_MEMORY_LIMIT_MB:-1024}
+      BACKUP_IO_CONCURRENCY: ${BACKUP_IO_CONCURRENCY:-2}
+
+      # Logging Configuration (backup-specific)
+      LOG_FILE_MAX_BYTES: ${LOG_FILE_MAX_BYTES:-10485760}
+      LOG_BACKUP_COUNT: ${LOG_BACKUP_COUNT:-5}
+
+      # Timeout Configuration (backup-specific)
+      MARIADB_CONNECTION_TIMEOUT: ${MARIADB_CONNECTION_TIMEOUT:-30}
+      BACKUP_OPERATION_TIMEOUT: ${BACKUP_OPERATION_TIMEOUT:-3600}
+      RESTORE_OPERATION_TIMEOUT: ${RESTORE_OPERATION_TIMEOUT:-7200}
+
+      # Notification Configuration
+      NOTIFICATIONS_ENABLED: ${NOTIFICATIONS_ENABLED:-false}
+      NOTIFICATION_WEBHOOK_URL: ${NOTIFICATION_WEBHOOK_URL:-}
+      NOTIFICATION_EMAIL: ${NOTIFICATION_EMAIL:-}
+
+      # Health Check Configuration (backup-specific)
+      HEALTH_CHECK_ENABLED: ${HEALTH_CHECK_ENABLED:-true}
+      HEALTH_CHECK_INTERVAL: ${HEALTH_CHECK_INTERVAL:-300}
+
+      # Git Repository Configuration (for custom scripts)
+      GIT_REPO: ${GIT_REPO:-}
+      GIT_BRANCH: ${GIT_BRANCH:-main}
+      GIT_USERNAME: ${GIT_USERNAME:-}
+      GIT_TOKEN: ${GIT_TOKEN:-}
+      SCRIPTS_PATH: ${SCRIPTS_PATH:-database/scripts}
+
+      # Environment Detection
+      DEPLOYMENT_ENVIRONMENT: ${DEPLOYMENT_ENVIRONMENT:-DOCKER}
+      TZ: ${TZ:-America/Bogota}
+
+      # Development/Testing
+      ECS_CONTAINER_METADATA_URI_V4: ${ECS_CONTAINER_METADATA_URI_V4:-}
+
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
+
+    volumes:
+      - mariadb_data:${MARIADB_DATA_PATH:-/var/lib/mysql}
+      - mariadb_logs:${MARIADB_LOGS_PATH:-/var/log/mysql}
+      - mariadb_backup:${MARIADB_BACKUP_PATH:-/backup}
+      # Optional: Mount AWS credentials for local development
+      - ${AWS_CREDENTIALS_PATH:-/dev/null}:/home/mysql/.aws/credentials:ro
+      - ${AWS_CONFIG_PATH:-/dev/null}:/home/mysql/.aws/config:ro
+
+    networks:
+      - mariadb_network
+
+    env_file:
+      - .env
+
+    deploy:
+      resources:
+        limits:
+          cpus: '${CONTAINER_CPU_LIMIT:-2}'
+          memory: ${CONTAINER_MEMORY_LIMIT:-4G}
+        reservations:
+          cpus: '1'
+          memory: 2G
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 5
+        window: 120s
+
+    ulimits:
+      nofile:
+        soft: ${MARIADB_ULIMIT_NOFILE:-65535}
+        hard: ${MARIADB_ULIMIT_NOFILE:-65535}
+      nproc:
+        soft: ${MARIADB_ULIMIT_NPROC:-65535}
+        hard: ${MARIADB_ULIMIT_NPROC:-65535}
+
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "--silent"]
+      interval: 60s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+
+    security_opt:
+      - no-new-privileges:true
+
+    tmpfs:
+      - /tmp:size=100M,noexec,nosuid,nodev
+
+    # Enhanced container configuration for AWS environments
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+
+    read_only: false
+
+    # Labels for better container management
+    labels:
+      com.quipux.service: "mariadb"
+      com.quipux.version: "${STACK_VERSION:-11.4}"
+      com.quipux.environment: "${DEPLOYMENT_ENVIRONMENT:-docker}"
+      com.quipux.secrets-manager: "${USE_SECRETS_MANAGER:-false}"
+      com.quipux.backup-enabled: "${BACKUP_ENABLED:-true}"
+      com.quipux.pitr-enabled: "${PITR_ENABLED:-false}"
+
+volumes:
+  mariadb_data:
+    name: mariadb_data
+    driver: local
+    labels:
+      com.quipux.volume: "mariadb-data"
+      com.quipux.backup: "required"
+      com.quipux.backup.storage-type: "${BACKUP_STORAGE_TYPE:-local}"
+
+  mariadb_logs:
+    name: mariadb_logs
+    driver: local
+    labels:
+      com.quipux.volume: "mariadb-logs"
+      com.quipux.backup: "optional"
+
+  mariadb_backup:
+    name: mariadb_backup
+    driver: local
+    labels:
+      com.quipux.volume: "mariadb-backup"
+      com.quipux.backup: "required"
+      com.quipux.retention-days: "${BACKUP_ARCHIVE_AFTER_DAYS:-30}"
+      com.quipux.compression: "${BACKUP_COMPRESSION_ALGORITHM:-zstd}"
+
+networks:
+  mariadb_network:
+    name: mariadb_network
+    driver: bridge
+    labels:
+      com.quipux.network: "mariadb"
+      com.quipux.environment: "${DEPLOYMENT_ENVIRONMENT:-docker}"

@@ -1,0 +1,65 @@
+# Git
+.git
+.gitignore
+.gitmodules
+
+# Documentation
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+VERSIONING.md
+LICENSE
+*.md
+
+# IDE
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+ENV/
+*.egg-info/
+
+# Testing
+tests/
+*.test.py
+.coverage
+htmlcov/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# Docker
+docker-compose.override.yml
+Dockerfile.dev
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Data (use volumes instead)
+data/
+logs/
+backup/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/
+*.tmp
+*.log
